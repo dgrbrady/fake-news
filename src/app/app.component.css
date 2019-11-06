@@ -1,0 +1,17 @@
+.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.result {
+  font-size: 3rem;
+  text-align: center;
+}
+
+.description {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-left: 5rem;
+  margin-right: 5rem;
+  margin-bottom: 2rem;
+}
