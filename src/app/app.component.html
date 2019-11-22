@@ -1,44 +1,41 @@
 <div class="center" style="text-align:center">
-  <h1>Welcome to {{ title }}!</h1>
+    <h1>Welcome to {{ title }}!</h1>
 </div>
 
 <div *ngIf="showDescription" class="description">
-  Are you tired of all the fake news? Need help training your eye to weed out
-  what's real and what's a load of malarky? Welcome to Fake-News! The rules are
-  simple: We show you a headline and you guess if it's from a real news source
-  or from a phony one (The Onion). Press the "Get News" button to get started!
+    Are you tired of all the fake news? Need help training your eye to weed out
+    what's real and what's a load of malarky? Welcome to Fake-News! The rules
+    are simple: We show you a headline and you guess if it's from a real news
+    source or from a phony one (The Onion). Press the "Get News" button to get
+    started!
 </div>
 <button
-  mat-raised-button
-  class="center"
-  style="display: block; margin-bottom: 1rem;"
-  (click)="getPost()"
+    mat-raised-button
+    class="center"
+    style="display: block; margin-bottom: 1rem;"
+    (click)="getPost()"
 >
-  Get News
+    Get News
 </button>
 <div
-  [ngStyle]="showDescription ? { display: 'none' } : ''"
-  style="margin-bottom: 3rem;"
+    [ngStyle]="showDescription ? { display: 'none' } : ''"
+    style="margin-bottom: 3rem;"
 >
-  <span style="font-size: 2rem; margin-right: 2rem;"
-    >Remaining: {{ posts.length }}</span
-  >
-  <app-score #score [total]="total"></app-score>
+    <span style="font-size: 2rem; margin-right: 2rem;"
+        >Remaining: {{ posts.length }}</span
+    >
+    <app-score #score [total]="total"></app-score>
 </div>
 
-<div *ngIf="correct" style="color: green;" class="result">
-  Correct!
-</div>
-<div
-  *ngIf="!correct && correct !== undefined"
-  style="color: red;"
-  class="result"
->
-  Wrong!
+<div class="result" *ngIf="answered" [@slide]>
+    <span *ngIf="correct" style="color: green;"> Correct!</span>
+    <span *ngIf="!correct && correct !== undefined" style="color: red;">
+        Wrong!
+    </span>
 </div>
 <app-post
-  *ngIf="post"
-  [post]="post"
-  (correct)="$event ? guessCorrect() : guessWrong()"
-  (next)="getPost()"
+    *ngIf="post"
+    [post]="post"
+    (correct)="$event ? guessCorrect() : guessWrong()"
+    (next)="getPost()"
 ></app-post>
