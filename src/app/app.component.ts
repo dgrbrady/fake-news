@@ -23,30 +23,26 @@ export class AppComponent implements OnInit {
     title = 'Fake-News';
     posts: any[] = [];
     total = 0;
-    post: { title: string; dataSet: 'real' | 'fake' };
+    post: { url: string; title: string; dataSet: 'real' | 'fake' };
     correct: boolean;
     showDescription = true;
     answered = false;
     @ViewChild('score', { static: true }) score: ScoreComponent;
 
     ngOnInit() {
-        function resultMapper(title: string, dataSet: 'real' | 'fake') {
-            return { title, dataSet };
+        function resultMapper(post: {}, dataSet: 'real' | 'fake') {
+            return { ...post, dataSet };
         }
         zip(
             this.reddit
                 .getFakeNews()
                 .pipe(
-                    map(posts =>
-                        posts.map(title => resultMapper(title, 'fake'))
-                    )
+                    map(posts => posts.map(post => resultMapper(post, 'fake')))
                 ),
             this.reddit
                 .getRealNews()
                 .pipe(
-                    map(posts =>
-                        posts.map(title => resultMapper(title, 'real'))
-                    )
+                    map(posts => posts.map(post => resultMapper(post, 'real')))
                 )
         ).subscribe(posts => {
             this.posts = posts[0].concat(posts[1]);

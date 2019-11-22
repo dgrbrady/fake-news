@@ -1,32 +1,32 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'app-post',
-  templateUrl: './post.component.html',
-  styleUrls: ['./post.component.css']
+    selector: 'app-post',
+    templateUrl: './post.component.html',
+    styleUrls: ['./post.component.css']
 })
 export class PostComponent implements OnInit {
-  constructor() {}
+    constructor() {}
 
-  @Input() post;
-  @Output() correct: EventEmitter<boolean> = new EventEmitter();
-  @Output() next = new EventEmitter();
+    @Input() post;
+    @Output() correct: EventEmitter<boolean> = new EventEmitter();
+    @Output() next = new EventEmitter();
 
-  answered = false;
+    answered = false;
 
-  ngOnInit() {}
+    ngOnInit() {}
 
-  answer(guess: string) {
-    if (guess === this.post.dataSet) {
-      this.correct.emit(true);
-    } else {
-      this.correct.emit(false);
+    answer(guess: string) {
+        if (guess === this.post.dataSet) {
+            this.correct.emit(true);
+        } else {
+            this.correct.emit(false);
+        }
+        this.answered = true;
     }
-    this.answered = true;
-  }
 
-  nextPost() {
-    this.answered = false;
-    this.next.emit();
-  }
+    nextPost() {
+        this.answered = false;
+        this.next.emit();
+    }
 }
