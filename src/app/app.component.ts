@@ -20,7 +20,7 @@ import { trigger, style, transition, animate } from '@angular/animations';
 })
 export class AppComponent implements OnInit {
     constructor(private reddit: RedditService) {}
-    title = 'Fake-News';
+    title = 'Guess The Onion';
     posts: any[] = [];
     total = 0;
     post: { url: string; title: string; dataSet: 'real' | 'fake' };
