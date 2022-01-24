@@ -8,7 +8,7 @@ import { PostComponent } from './components/post/post.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { ScoreComponent } from './components/score/score.component';
-
+import { environment } from '../environments/environment';
 import * as Sentry from '@sentry/browser';
 
 Sentry.init({
@@ -33,7 +33,9 @@ export class SentryErrorHandler implements ErrorHandler {
         BrowserAnimationsModule,
         MaterialModule
     ],
-    providers: [{ provide: ErrorHandler, useClass: SentryErrorHandler }],
+    providers: environment.production ?
+      [{ provide: ErrorHandler, useClass: SentryErrorHandler }] : 
+      [],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

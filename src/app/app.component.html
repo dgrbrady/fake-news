@@ -1,22 +1,44 @@
-<div class="center" style="text-align:center">
-    <h1>Welcome to {{ title }}!</h1>
+<div class="flex flex-row flex-wrap gap-2 h-full bg-fuchsia-100 root">
+  
+<h1 class="flex-100 h-fit text-center text-2xl p-3 bg-violet-900 text-white">
+    {{ title }}
+</h1>
+
+<div *ngIf="showDescription" class="
+    flex flex-100 justify-center mt-[10%]
+  ">
+    <div class="
+      flex-1 max-w-xl h-fit p-5
+      text-lg text-center 
+      bg-white
+      shadow-brutal-violet
+    ">
+      Are you tired of all the <span class="italic text-fuchsia-900 text-xl">fake news?</span>
+      Need help training your eye to weed out
+      what's real and what's a load of malarky? Welcome to 
+      <span class="text-2xl text-violet-900">GTFO!</span> The rules
+      are simple: We show you a headline and you guess if it's from a real news
+      source or from a phony one (The Onion). Press the "Get News" button to get
+      started!
+    </div>
 </div>
 
-<div *ngIf="showDescription" class="description">
-    Are you tired of all the fake news? Need help training your eye to weed out
-    what's real and what's a load of malarky? Welcome to Fake-News! The rules
-    are simple: We show you a headline and you guess if it's from a real news
-    source or from a phony one (The Onion). Press the "Get News" button to get
-    started!
+<div *ngIf="showDescription" class="flex flex-100 justify-center mt-auto mb-3">
+  <button
+      class="
+        bg-teal-800 text-white text-lg py-2 px-3 shadow-brutal-teal-300
+        border-2 border-transparent
+        hover:bg-teal-200 hover:text-teal-900 hover:shadow-none hover:underline
+        hover:border-teal-900 hover:border-2
+        transition ease-in-out duration-500
+      "
+      (click)="getPost()"
+  >
+      Get Started
+  </button>
 </div>
-<button
-    mat-raised-button
-    class="center"
-    style="display: block; margin-bottom: 1rem;"
-    (click)="getPost()"
->
-    Get News
-</button>
+
+  <!-- *ngIf="!showDescription" -->
 <div
     [ngStyle]="showDescription ? { display: 'none' } : ''"
     style="margin-bottom: 3rem;"
@@ -40,3 +62,4 @@
     (correct)="$event ? guessCorrect() : guessWrong()"
     (next)="getPost()"
 ></app-post>
+</div>
