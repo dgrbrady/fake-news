@@ -1,34 +1,30 @@
-<mat-card class="card">
-    <mat-card-title style="text-align: center;">
-        {{ post.title }}
-    </mat-card-title>
-    <mat-card-actions style="display: flex;">
-        <button
-            [disabled]="answered"
-            style="margin-left: auto;"
-            color="accent"
-            mat-raised-button
-            (click)="answer('real')"
-        >
-            Real!
-        </button>
-        <button
-            [disabled]="answered"
-            style="margin-left: auto; margin-right: auto;"
-            color="accent"
-            mat-raised-button
-            (click)="answer('fake')"
-        >
-            Fake!
-        </button>
-    </mat-card-actions>
-</mat-card>
-<div *ngIf="answered" style="margin-top: 2rem;">
+<article class="flex flex-wrap bg-white max-w-5xl">
+  <h2 class="text-center flex-100 p-2 bg-violet-900 text-white text-3xl">
+    {{ post.title }}
+  </h2>
+  <section class="flex flex-100 justify-between p-4 gap-8">
     <button
-        mat-raised-button
-        (click)="nextPost()"
-        style="display: block; margin-left: auto; margin-right: auto;"
+      [disabled]="answered"
+      class="flex-1 w-fit p-2 m-1 bg-violet-100 shadow-brutal-violet
+        transition ease-in-out duration-300
+        hover:bg-violet-900 hover:text-white hover:shadow-none
+        disabled:bg-gray-300 disabled:shadow-none disabled:text-gray-700
+      "
+      (click)="answer('real')"
     >
-        Next
+      Real!
     </button>
-</div>
+    <button
+      [disabled]="answered"
+      class="flex-1 w-fit p-2 m-1 bg-violet-100 shadow-brutal-violet
+        transition ease-in-out duration-300
+        hover:bg-violet-900 hover:text-white hover:shadow-none
+        disabled:bg-gray-300 disabled:shadow-none disabled:text-gray-700
+      "
+      (click)="answer('fake')"
+    >
+      Fake!
+    </button>
+  </section>
+</article>
+

@@ -1,65 +1,84 @@
-<div class="flex flex-row flex-wrap gap-2 h-full bg-fuchsia-100 root">
-  
-<h1 class="flex-100 h-fit text-center text-2xl p-3 bg-violet-900 text-white">
+<div class="flex flex-row flex-wrap content-start justify-center h-full bg-fuchsia-100 root">
+  <h1 class="flex-100 h-fit text-center text-2xl p-3 bg-violet-900 text-white">
     {{ title }}
-</h1>
+  </h1>
 
-<div *ngIf="showDescription" class="
-    flex flex-100 justify-center mt-[10%]
-  ">
+  <div *ngIf="showDescription" class="
+    flex flex-100 justify-center mt-[15%]
+    ">
     <div class="
       flex-1 max-w-xl h-fit p-5
       text-lg text-center 
       bg-white
       shadow-brutal-violet
-    ">
-      Are you tired of all the <span class="italic text-fuchsia-900 text-xl">fake news?</span>
+      ">
+      Are you tired of all the 
+      <span class="italic text-fuchsia-900 text-xl">fake news?</span>
       Need help training your eye to weed out
       what's real and what's a load of malarky? Welcome to 
       <span class="text-2xl text-violet-900">GTFO!</span> The rules
       are simple: We show you a headline and you guess if it's from a real news
-      source or from a phony one (The Onion). Press the "Get News" button to get
-      started!
+      source or from a phony one (The Onion).
     </div>
-</div>
+  </div>
 
-<div *ngIf="showDescription" class="flex flex-100 justify-center mt-auto mb-3">
-  <button
+  <div *ngIf="showDescription" class="flex flex-100 justify-center mt-40">
+    <button
       class="
-        bg-teal-800 text-white text-lg py-2 px-3 shadow-brutal-teal-300
-        border-2 border-transparent
-        hover:bg-teal-200 hover:text-teal-900 hover:shadow-none hover:underline
-        hover:border-teal-900 hover:border-2
-        transition ease-in-out duration-500
+      bg-teal-800 text-white text-lg py-2 px-3 shadow-brutal-teal-300
+      border-2 border-transparent
+      hover:bg-teal-200 hover:text-teal-900 hover:shadow-none hover:underline
+      hover:border-teal-900 hover:border-2
+      transition ease-in-out duration-500
       "
       (click)="getPost()"
-  >
-      Get Started
-  </button>
-</div>
-
-  <!-- *ngIf="!showDescription" -->
-<div
-    [ngStyle]="showDescription ? { display: 'none' } : ''"
-    style="margin-bottom: 3rem;"
->
-    <span style="font-size: 2rem; margin-right: 2rem;"
-        >Remaining: {{ posts.length }}</span
     >
-    <app-score #score [total]="total"></app-score>
-</div>
+      Get Started
+    </button>
+  </div>
 
-<div class="result" *ngIf="answered" [@slide]>
-    <span *ngIf="correct" style="color: green;"> Correct!</span>
-    <span *ngIf="!correct && correct !== undefined" style="color: red;">
-        Wrong!
+  <div [ngStyle]="showDescription ? { display: 'none' } : ''"
+    class="flex flex-100 justify-between h-fit bg-white text-2xl text-center 
+      divide-x divide-violet-500 py-2 mb-[15%]"
+    >
+    <span class="flex-1">Remaining: {{ posts.length }}</span>
+    <app-score #score [total]="total" class="flex-1"></app-score>
+  </div>
+
+
+  <div class="flex flex-100 justify-center">
+    <app-post
+      *ngIf="post"
+      [post]="post"
+      (correct)="$event ? guessCorrect() : guessWrong()"
+    ></app-post>
+  </div>
+
+  <div *ngIf="answered" [@slide]
+    class="
+      result flex flex-1 items-baseline justify-around bg-violet-50 text-2xl 
+      max-w-3xl p-3 text-center shadow-brutal-violet min-w-fit mt-4
+    ">
+    <span *ngIf="correct" class="text-green-700"> Correct!</span>
+    <span *ngIf="!correct && correct !== undefined" class="text-red-700">
+      Wrong!
     </span>
-    Read the original article <a href="{{ post.url }}" target="_blank">here</a>
-</div>
-<app-post
-    *ngIf="post"
-    [post]="post"
-    (correct)="$event ? guessCorrect() : guessWrong()"
-    (next)="getPost()"
-></app-post>
+    <span>
+      Read the original article 
+      <a href="{{ post.url }}" target="_blank" class="underline text-violet-900">here</a>
+    </span>
+
+    <button
+      class="
+      bg-teal-800 text-white text-lg px-2
+      border-2 border-transparent
+      hover:bg-teal-200 hover:text-teal-900 hover:underline
+      hover:border-teal-900 hover:border-2
+      transition ease-in-out duration-500
+      "
+      (click)="getPost()"
+    >
+      Next
+    </button>
+  </div>
 </div>

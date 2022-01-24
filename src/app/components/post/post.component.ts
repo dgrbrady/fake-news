@@ -1,20 +1,23 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
     selector: 'app-post',
     templateUrl: './post.component.html',
     styleUrls: ['./post.component.scss']
 })
-export class PostComponent implements OnInit {
+export class PostComponent implements OnChanges {
     constructor() {}
 
     @Input() post;
     @Output() correct: EventEmitter<boolean> = new EventEmitter();
-    @Output() next = new EventEmitter();
 
     answered = false;
 
-    ngOnInit() {}
+    ngOnChanges(changes: SimpleChanges) {
+      if (changes?.post.currentValue !== changes?.post.previousValue) {
+        this.answered = false;
+      }
+    }
 
     answer(guess: string) {
         if (guess === this.post.dataSet) {
@@ -23,10 +26,5 @@ export class PostComponent implements OnInit {
             this.correct.emit(false);
         }
         this.answered = true;
-    }
-
-    nextPost() {
-        this.answered = false;
-        this.next.emit();
     }
 }
