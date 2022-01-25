@@ -17,8 +17,9 @@
       Need help training your eye to weed out
       what's real and what's a load of malarky? Welcome to 
       <span class="text-2xl text-violet-900">GTFO!</span> The rules
-      are simple: We show you a headline and you guess if it's from a real news
-      source or from a phony one (The Onion).
+      are simple: We show you two headlines. One is from a real news source and 
+      one is from The Onion. You guess which one is the 
+      <span class="italic text-fuchsia-900 text-xl">FAKE</span>. Are you ready?
     </div>
   </div>
 
@@ -31,7 +32,7 @@
       hover:border-teal-900 hover:border-2
       transition ease-in-out duration-500
       "
-      (click)="getPost()"
+      (click)="getPosts()"
     >
       Get Started
     </button>
@@ -41,14 +42,15 @@
     class="flex flex-100 justify-between h-fit bg-white text-2xl text-center 
       divide-x divide-violet-500 py-2 mb-[15%]"
     >
-    <span class="flex-1">Remaining: {{ posts.length }}</span>
+    <span class="flex-1">Remaining: {{ remaining }}</span>
     <app-score #score [total]="total" class="flex-1"></app-score>
   </div>
 
 
-  <div class="flex flex-100 justify-center">
+  <div class="flex flex-100 flex-wrap justify-evenly gap-8">
     <app-post
-      *ngIf="post"
+      *ngFor="let post of posts"
+      [disabled]="answered"
       [post]="post"
       (correct)="$event ? guessCorrect() : guessWrong()"
     ></app-post>
@@ -57,15 +59,11 @@
   <div *ngIf="answered" [@slide]
     class="
       result flex flex-1 items-baseline justify-around bg-violet-50 text-2xl 
-      max-w-3xl p-3 text-center shadow-brutal-violet min-w-fit mt-4
+      max-w-3xl p-3 text-center shadow-brutal-violet min-w-fit mt-16
     ">
     <span *ngIf="correct" class="text-green-700"> Correct!</span>
     <span *ngIf="!correct && correct !== undefined" class="text-red-700">
       Wrong!
-    </span>
-    <span>
-      Read the original article 
-      <a href="{{ post.url }}" target="_blank" class="underline text-violet-900">here</a>
     </span>
 
     <button
@@ -76,9 +74,9 @@
       hover:border-teal-900 hover:border-2
       transition ease-in-out duration-500
       "
-      (click)="getPost()"
+      (click)="getPosts()"
     >
-      Next
+      Next Round!
     </button>
   </div>
 </div>

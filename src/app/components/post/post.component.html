@@ -1,21 +1,10 @@
-<article class="flex flex-wrap bg-white max-w-5xl">
+<article class="flex flex-wrap bg-white max-w-2xl">
   <h2 class="text-center flex-100 p-2 bg-violet-900 text-white text-3xl">
     {{ post.title }}
   </h2>
-  <section class="flex flex-100 justify-between p-4 gap-8">
+  <section class="flex flex-wrap flex-100 justify-between p-4 gap-4 divide-y divide-teal-900">
     <button
-      [disabled]="answered"
-      class="flex-1 w-fit p-2 m-1 bg-violet-100 shadow-brutal-violet
-        transition ease-in-out duration-300
-        hover:bg-violet-900 hover:text-white hover:shadow-none
-        disabled:bg-gray-300 disabled:shadow-none disabled:text-gray-700
-      "
-      (click)="answer('real')"
-    >
-      Real!
-    </button>
-    <button
-      [disabled]="answered"
+      [disabled]="disabled"
       class="flex-1 w-fit p-2 m-1 bg-violet-100 shadow-brutal-violet
         transition ease-in-out duration-300
         hover:bg-violet-900 hover:text-white hover:shadow-none
@@ -25,6 +14,11 @@
     >
       Fake!
     </button>
+
+    <div *ngIf="disabled" class="flex-100 text-center pt-2">
+      Read the original article 
+      <a href="{{ post.url }}" target="_blank" class="underline text-violet-900">here</a>
+    </div>
   </section>
 </article>
 
