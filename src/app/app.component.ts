@@ -1,11 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { RedditService } from './reddit.service';
-import { map, tap } from 'rxjs/operators';
-import { zip } from 'rxjs';
+import { Component, Inject, ViewChild } from '@angular/core';
+import { NewsService } from './news.service';
+import { map, shareReplay } from 'rxjs/operators';
 import { ScoreComponent } from './components/score/score.component';
 import { trigger, style, transition, animate } from '@angular/animations';
-
-export type RedditPost = { url: string; title: string; dataSet: 'real' | 'fake' };
+import { NewsPostTuple } from './news-post';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
     selector: 'app-root',
@@ -20,50 +19,30 @@ export type RedditPost = { url: string; title: string; dataSet: 'real' | 'fake' 
         ])
     ]
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
     answered = false;
     correct: boolean;
-    posts = [];
+    posts$ = this.newsService.news$.pipe(
+      map(posts => this.scramble(posts)),
+      shareReplay(),
+    );
     title = 'GTFO! (Guess The Fake One)';
-    total = 0;
-    remaining = 0;
+    total$ = this.newsService.totalCount$;
+    remaining$ = this.newsService.remainingCount$;
     showDescription = true;
     @ViewChild('score') score: ScoreComponent;
-    
-    private fakePosts = [];
-    private realPosts = [];
+    locationUrl = this.document.location.href;   
+    get tweetText() : string {
+      return `I scored ${this.score.correct}/${this.score.total} on GTFO!
+Think you can do any better?
 
-    constructor(private reddit: RedditService) {}
-
-    ngOnInit() {
-        function resultMapper(post: {}, dataSet: 'real' | 'fake') {
-            return { ...post, dataSet };
-        }
-        zip(
-            this.reddit
-                .getFakeNews()
-                .pipe(
-                    map(posts => posts.map(post => resultMapper(post, 'fake'))),
-                    tap(posts => this.fakePosts.push(...posts))
-                ),
-            this.reddit
-                .getRealNews()
-                .pipe(
-                    map(posts => posts.map(post => resultMapper(post, 'real'))),
-                    tap(posts => this.realPosts.push(...posts))
-                )
-        ).subscribe(posts => {
-            this.total = posts[0].length;
-        });
+Check it out at ${this.locationUrl}` 
     }
 
+    constructor(private newsService: NewsService, @Inject(DOCUMENT) private document: Document) {}
+
     getPosts() {
-      const fakePost = this.getRandomFakePost();
-      const realPost = this.getRandomRealPost();
-      const coinToss = Math.floor(Math.random() * 2);
-      // arrange the pair of posts based off of coin toss so that the order
-      // is random each time
-      this.posts = coinToss ? [fakePost, realPost] : [realPost, fakePost];
+      this.newsService.loadNext();
       this.startRound();
     }
 
@@ -78,22 +57,17 @@ export class AppComponent implements OnInit {
         this.answered = true;
     }
 
+    private scramble(posts: NewsPostTuple): NewsPostTuple {
+      const [fakePost, realPost] = posts;
+      const coinToss = Math.floor(Math.random() * 2);
+      // arrange the pair of posts based off of coin toss so that the order
+      // is random each time
+      return coinToss ? [fakePost, realPost] : [realPost, fakePost];
+    }
+
     private startRound() {
       this.answered = false;
       this.correct = undefined;
       this.showDescription = false;
-      this.remaining = this.realPosts.length;
-    }
-
-    private getRandomFakePost() {
-      const random = Math.floor(Math.random() * this.fakePosts.length);
-      this.fakePosts.splice(random, 1);
-      return this.fakePosts[random];
-    }
-    
-    private getRandomRealPost() {
-      const random = Math.floor(Math.random() * this.realPosts.length);
-      this.realPosts.splice(random, 1);
-      return this.realPosts[random];
     }
 }

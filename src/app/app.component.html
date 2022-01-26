@@ -38,22 +38,39 @@
     </button>
   </div>
 
-  <div [ngStyle]="showDescription ? { display: 'none' } : ''"
+  <div [ngStyle]="showDescription ? { display: 'none' } : undefined"
     class="flex flex-100 justify-between h-fit bg-white text-2xl text-center 
       divide-x divide-violet-500 py-2 mb-[15%]"
     >
-    <span class="flex-1">Remaining: {{ remaining }}</span>
-    <app-score #score [total]="total" class="flex-1"></app-score>
+    <span class="flex-1">Remaining: {{ remaining$ | async }}</span>
+    <app-score #score [total]="total$ | async" class="flex-1"></app-score>
   </div>
 
 
   <div class="flex flex-100 flex-wrap justify-evenly gap-8">
-    <app-post
-      *ngFor="let post of posts"
-      [disabled]="answered"
-      [post]="post"
-      (correct)="$event ? guessCorrect() : guessWrong()"
-    ></app-post>
+    <ng-container *ngIf="posts$ | async | newsIsAvailable; else newsUnavailable">
+      <app-post
+        *ngFor="let post of posts$ | async"
+        [disabled]="answered"
+        [post]="post"
+        (correct)="$event ? guessCorrect() : guessWrong()"
+      ></app-post>
+    </ng-container>
+    <ng-template #newsUnavailable>
+      <div *ngIf="!showDescription" class="bg-white">
+        <div class="text-2xl bg-teal-700 text-white p-2">
+          COMPLETED
+        </div>
+        <p class="p-4">
+          Thanks for playing! Feel free to share your results on 
+          <a class="text-violet-900 underline" target="_blank"
+            href="https://twitter.com/intent/tweet?text={{ tweetText | urlEncode }}">
+            Twitter
+          </a>
+          :)
+        </p>
+      </div>
+    </ng-template>
   </div>
 
   <div *ngIf="answered" [@slide]

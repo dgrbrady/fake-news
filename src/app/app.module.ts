@@ -6,10 +6,11 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PostComponent } from './components/post/post.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from './material.module';
 import { ScoreComponent } from './components/score/score.component';
 import { environment } from '../environments/environment';
 import * as Sentry from '@sentry/browser';
+import { NewsIsAvailablePipe } from './pipes/news-is-available.pipe';
+import { UrlEncodePipe } from './pipes/url-encode.pipe';
 
 Sentry.init({
     dsn: 'https://b82e9042775f4941876654a4fb81d785@sentry.io/1830815'
@@ -25,13 +26,12 @@ export class SentryErrorHandler implements ErrorHandler {
 }
 
 @NgModule({
-    declarations: [AppComponent, PostComponent, ScoreComponent],
+    declarations: [AppComponent, PostComponent, ScoreComponent, NewsIsAvailablePipe, UrlEncodePipe],
     imports: [
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
         BrowserAnimationsModule,
-        MaterialModule
     ],
     providers: environment.production ?
       [{ provide: ErrorHandler, useClass: SentryErrorHandler }] : 
